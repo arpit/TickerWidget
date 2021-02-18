@@ -12,8 +12,9 @@ class TickerWidget extends StatefulWidget {
   // How fast a tile animates across
   // Note that a ticker is made of multiple tiles
   final int tileAnimDuration;
+  final int animDirection;
 
-  TickerWidget(this._tile, {this.tileAnimDuration = 4});
+  TickerWidget(this._tile, {this.tileAnimDuration = 4, this.animDirection = 1});
 
 
   @override
@@ -60,7 +61,7 @@ class _TickerWidgetState extends State<TickerWidget> with TickerProviderStateMix
       animation: animation,
       builder: (context, snapshot) {
         return CustomPaint(
-          painter: AnimatedTilePainter(widget._tile, animation.value),
+          painter: AnimatedTilePainter(widget._tile, animation.value, widget.animDirection),
           child: Container(),
         );
       },
@@ -72,20 +73,33 @@ class AnimatedTilePainter extends CustomPainter{
 
   final Tile _tile;
   final double _animPercent;// from 0 to 1
+  int _animDirection = 1;
 
-  AnimatedTilePainter(this._tile, this._animPercent);
+  AnimatedTilePainter(this._tile, this._animPercent, this._animDirection);
 
   void paint(Canvas canvas, Size size) {
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     final numTiles = (size.width / _tile.width).ceil() + 1;
 
-    canvas.translate(_animPercent * _tile.width, 0);
-
+    if(_animDirection == 1){
+      canvas.translate(_animPercent * _tile.width, 0);
+      var extraRect = Rect.fromLTRB(-_tile.width,0, 0, size.height);
+      _tile.paint(canvas, extraRect, _animPercent);
+    }
+    else{
+      canvas.translate(-1 * _animPercent * _tile.width, 0);
+      var extraRect = Rect.fromLTRB(numTiles*_tile.width,0, (numTiles*_tile.width)+_tile.width, size.height);
+      _tile.paint(canvas, extraRect, _animPercent);
+    }
+    
     for(var i=0; i<numTiles; i++){
-      var left = (i-1)*_tile.width;
+      var left = i*_tile.width;
       final rect = Rect.fromLTRB(left,0, left + size.width, size.height);
       _tile.paint(canvas, rect, _animPercent);
     }
+
+
+
   }
 
   bool shouldRepaint(CustomPainter oldDelegate) {

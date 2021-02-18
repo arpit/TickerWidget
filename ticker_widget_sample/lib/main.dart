@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
                 width: 200, height:200,
                 child: Container(
                     color:Colors.white,
-                    child:TickerWidget(tile, tileAnimDuration: 1,)
+                    child:TickerWidget(tile, tileAnimDuration: 1,animDirection: -1,)
                 )
             )
         ),
