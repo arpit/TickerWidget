@@ -11,6 +11,7 @@ class TextTile implements Tile{
   final double margin;
 
   final Paint _paint;
+  Rect _paintRect;
 
   TextTile({@required this.context,
             this.text="",
@@ -24,11 +25,16 @@ class TextTile implements Tile{
           ..color = backgroundColor ?? Colors.yellow
           ..style = PaintingStyle.fill;
 
+
   @override
   paint(Canvas canvas, Rect rect, double animPercent) {
       var painter = textPainter;
       painter.layout();
-      canvas.drawRect(rect, _paint);
+
+      _paintRect = rect.width >= painter.size.width ? rect :
+          Rect.fromLTRB(rect.left, rect.top, rect.left + painter.size.width+2*margin, rect.bottom);
+
+      canvas.drawRect(_paintRect, _paint);
       painter.paint(canvas, Offset(rect.left + margin, (rect.height - painter.size.height)/2));
   }
 
