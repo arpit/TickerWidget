@@ -10,9 +10,18 @@ class SineWaveTile implements Tile{
   final amplitude;
   final segments;
   Color color;
+  Paint _paint;
 
   SineWaveTile(
-      {Color strokeColor, this.period=100, this.amplitude=40, this.segments=20}){color = strokeColor ?? Colors.red;}
+      {Color strokeColor, this.period=100, this.amplitude=40, this.segments=20}){
+
+      color = strokeColor ?? Colors.red;
+      _paint = Paint()
+        ..color = color
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 5;
+  }
 
 
   double calculateOffsetRadians(double lineStart, double pointX) {
@@ -27,11 +36,6 @@ class SineWaveTile implements Tile{
 
   void paint(Canvas canvas, Rect rect, double animPercent) {
 
-    final paint = Paint()
-      ..color = color
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 5;
 
     path.reset();
 
@@ -51,7 +55,7 @@ class SineWaveTile implements Tile{
       }
     }
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, _paint);
 
   }
 
