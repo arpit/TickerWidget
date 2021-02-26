@@ -13,14 +13,14 @@ class SineWaveTile implements Tile{
   Paint _paint;
 
   SineWaveTile(
-      {Color strokeColor, this.period=100, this.amplitude=40, this.segments=20}){
+      {Color strokeColor, double strokeWidth=5, this.period=100, this.amplitude=40, this.segments=20}){
 
       color = strokeColor ?? Colors.red;
       _paint = Paint()
         ..color = color
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 5;
+        ..strokeWidth = strokeWidth;
   }
 
 
